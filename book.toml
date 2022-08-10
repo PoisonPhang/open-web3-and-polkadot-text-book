@@ -1,0 +1,6 @@
+[book]
+authors = ["Connor Davis"]
+language = "en"
+multilingual = false
+src = "src"
+title = "Open Web3 & Polkadot Textbook"
