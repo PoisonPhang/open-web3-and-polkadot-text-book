@@ -12,14 +12,14 @@ in the Summer of 2022.
 This textbook is designed around the use of mdbook as the primary method of 
 consuming the content written within.
 
-(mdbook)[https://rust-lang.github.io/mdBook/index.html] is a "command line tool 
+[mdbook](https://rust-lang.github.io/mdBook/index.html) is a "command line tool 
 to create books with Markdown."
 
 ### Requirements
 
 To locally view the textbook, you will need mdbook installed on your system. 
 This can be done in various ways depending on your development environment, 
-please see the (official mdbook installation guide)[https://rust-lang.github.io/mdBook/guide/installation.html].
+please see the [official mdbook installation guide](https://rust-lang.github.io/mdBook/guide/installation.html).
 
 ### Usage
 
@@ -39,5 +39,5 @@ mdbook serve --open
 
 Currently, we are looking for contributions to the seven main chapters of this textbook.
 
-Please see our (contributing guide)[./.github/CONTRIBUTING.md] for more details.
+Please see our [contributing guide](./.github/CONTRIBUTING.md) for more details.
 
