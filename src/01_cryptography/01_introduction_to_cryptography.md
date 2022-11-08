@@ -1,198 +1,68 @@
-# The Problem
+# Introduction to Cryptography
 
-## Context
+Cryptography is a tool that forms the core of Web3 technology. Before understanding and developing Web3 systems, an understanding of cryptography and the assumptions we make with cryptography is neccessary.
 
-Due to the internet being a public space, bad actors will exist who will:
+## Goals of this Chapter
 
-* Read messages not intended for them
-* Impersonate others
-* Tamper with messages
+* Understand the goals desired when using cryptography
+* Understand the assumptions we make about cryptography
+* Learn about cryptographic primitives
 
-We still exist in a world where resources such as bandwidth, storage, and 
-computation are all limited.
+## The Problem
 
-Closed channels are, by definition, heavily constrained and unlikely to exist in 
-a useful capacity.
+The internet is an open and public space. However, some issues emerge when using it.
 
-## Open v.s. Closed Channels
+### Security
 
-Kerckhoff's Principle: Security should not rely on secret methods, but rather on 
-secret information.
+We assume the internet is considered an open and public place. We use the internet to communicate messages to each other while assuming some sense of identity. Given this assumption, individuals will exists that may try to impersonate others, tamper with messages, or read messages that were not intended for them.
 
-Meaning, we should not strive to create secure/closed methods/channels but 
-instead data that is secured independently of a system.
+This provides the problem of ensuring identity and message authenticity.
 
-# The Solution
+### Resources
 
-## Message Authenticity
+For the internet to exists, we need both storage and computation - both of which are physically limited.
 
-Like physical signatures, cryptography may be used to reasonably prove the origin 
-of a message and infer that the message is authentic.
+This means that we must strive to be efficient with our usage of the internet.
 
-However, unlike cryptography, physical signatures are very easy to 
-forge/reproduce.
+### Privacy
 
-## One-Way Functions
+We can assume that all channels of communication on the internet are, in some way, monitored.
 
-The basis of cryptographic hashing and asymmetric cryptography.
+This makes ensuring privacy through the means of a system pratically impossible.
 
-* (Generally) fast to compute
-* Hard to invert
-* May have a secret that makes them easy to invert
 
-## Hash Functions 
+## The Solution (With Cryptography)
 
-Hash functions are a critical example of one-way functions. Hash functions 
-provide some means of proving the content of some data is the same as another.
+**Kerckhoffs's Principle**: A cryptographic system should be secure even if everything about the system, except the key, is public knowledge.
 
-### Applications
+In other words, instead of depending on the system (the internet) to provide security, we should instead depend on the content of our messages to solve our problems.
 
-* Representation of larger data
-* Keys in a database
-* Digital signatures
-* Key derivation
-* Psudo-random functions
+### What Cryptography Provides
 
-### Properties
+As hinted by Kerckhoffs, cryptography provides us the means to acomplish this. Cyrptography provides tools that allow us to communicate in public spaces while ensuring security and privacy. This security comes from controlled data assessiblility, message authenticity, and data integrity.
 
-* Accept unbounded size input
-* Map to a bounded output
-* Fast to compute
-* One-Way Function
-* Resist pre-image attacks
-* Resist collisions
-
-#### Pre-Image attacks
-
-The attacker controls one input
-
-#### Collisions
-
-Two different data elements that produce the same output when hashed
-
-### Other Notes
-
-* Input Sensitivity - Changes to the hash do not scale directly to the change of 
-the input (i.e. "hello." and "hello" should produce very different hashes)
-* Non-Cryptographic hash functions may not be one-way and may not resist 
-pre-image attacks & collisions
-
-### Examples
-
-* xxHash (non-cryptographic)
-* MD5
-* SHA1
-* RIPEMD-160
-* SHA2-256
-* SHA3
-* Keccak
-* Blake2
-
-### Benchmarks
-
-![Benchmarks](./crypto-bench.png)
-
-## Symmetric Encryption
-
-Some functions that, given some data and a key, produces a hash that is 
-reversible given the original key.
-
-```
-x = [some data]
-k = [some key]
-se = [some symmetric encryption function]
-
-o = se(x, k)
-
-x == se(o, k)
-```
-
-### Examples
-
-* ChaCha20
-* Twofish
-* Serpent
-* Blowfish
-* AES
-* DES,
-* XOR
-
-### XOR Example
-
-```
-Plain: 1010   --> Cipher: 0110
-Key:   1100   |           1100
-       ----   |           ----
-       0110 --^           1010
-```
-
-## Considerations
-
-Care must be taken when working with symmetric encryption. Unsalted passwords 
-and [Exploring an Encrypted Penguin with AES-ECB](https://tonybox.net/posts/ecb-penguin/) 
-are great examples of this.
-
-## Asymmetric Cryptography
-
-* Transforms one value (secret key) into a corresponding counterpart(public key) 
-* Believed to be a one way function
-* The public key does not reveal what the original secret key is
-* Using only the public key, information can be transformed (encrypted) such that those with 
-knowledge of the secret key are able to regain the original information
-* Using the secret key, information can be transformed (signed) such that anyone 
-with knowledge of the information and the public key is able to confirm the 
-validity of the information
-
-### Asymmetric Protocols
-
-* Slowest to fastest: RSA, Elgamal, Elliptic Curve
-* Elliptic Curve Cryptography (ECC)
-  * ECDSA (SECP256k1, SECP256r1)
-  * Schnorr
-  * EdDSA (Ed25519, Ed448)
-  * Schnorr/Ristretto 25519
-  * BLS
-* ECC requires double the bits to the symmetric AES for the same level of security (e.g. 128 bit security requires a 256 bit ECC key)
-
-## Considerations
-
-* Symmetric cryptography is much faster but requires more setup and trust
-* Asymmetric cryptography is slow but maintains relationships such that less trust is required
-* Both can be used in different parts of a system in hybrid cryptography
-  * Symmetric encryption can provide speed and confidentiality
-  * Asymmetric can dictate relations among the participants
+* **Data Accessiblity**
   
-## Digital Signatures
+  To obtain access to cryptographically secure (encrypted) information, one must know a secret (normally called a key).
+  
+  It must be possible to communicate the knowlege of a cryptographic key without sharing the key itself.
+  
+* **Message Authenticity**
 
-Digital Signatures guarantee the authenticity and integrity of a message.
+  Often when communicating phisical information, we use a written signature to "prove" that we were the origin of said information. Similarly, a cryptographic signature may be used provide authenticity.
+  
+  A cryptographic signature should verify that the signer knows a secret without sharing the secret itself and should be, practically, impossible to forge.
 
-* **Signing Function:** A pure function which takes some message and a secret to output a signature
-* **Signature:** Proves the signer knew the secret without revealing the secret itself
-* A signature cannot be used to create more signatures
-* Can affirm authorship and integrity if the message is public information
+* **Data Integrity**
 
-### Considerations
+  Where as the content of a message signed with a physical signature can be manipulated without the signature itself becoming invalid, the same is not true in the context of cryptographic signatures. If the content of a message is changed after signing, the existing signature is no longer valid for that message.
 
-Signing large amounts of data is not efficient. Hashing large amounts of data is efficient.
+## Cryptographic Primatives
 
-Assuming the verifier of a signature is able to produce a hash of the message, a signature on the hash (relatively small) implies a signature on the message itself.
+### One-Way Functions & Hash Functions
 
-## Certifications
+### Symmetric Encryption
 
-Certifications are used to make attestations about public key relationships.
+### Asymmtric Cryptography
 
-Typically, by signing:
-
-* One or more identifiers (e.g. public key, hashes)
-* Information about ownership, witnessing, and/or attesting
-* Metadata about the information which could ensure conditional validity
-
-# Summary
-
-Cryptography allows us to:
-
-* Safely communicate on public networks
-* Access information 
-* Have expectations about a message's authenticity and integrity
-* Prove knowledge of a secret without sharing the secret
-* Represent large amounts of data
+### Cryptographic Signatures
